@@ -64,7 +64,7 @@
 			was a lack of good reference for a blog with support for search & image optimisation all in
 			the one place.
 		</p>
-		<a href="#" class="btn"
+		<a href="https://github.com/jessebenjamin1/jbsks" target="_blank" rel="noopener" class="btn"
 			><svg
 				viewBox="0 0 24 24"
 				width="24"

@@ -116,6 +116,7 @@
 
 	button svg {
 		height: 100%;
+		margin: 0;
 	}
 
 	.curtain-menu {
