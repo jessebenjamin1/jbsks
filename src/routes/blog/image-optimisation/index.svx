@@ -1,0 +1,72 @@
+---
+slug: /image-optimisation
+title: Image Optimisation via Vite ImageTools
+description: This project includes Vite ImageTools for image optimisation. I've also included some examples of how I like to process images.
+date: '2021-05-28'
+---
+
+<script context="module">
+	import SEO from '$lib/components/SEO.svelte';
+	import Plant from './plant2.jpg?w=400;600;800;900&format=webp;avif;jpg&srcset';
+</script>
+
+<SEO title={`${title}`} {description} slug={`/blog/${slug}/`} />
+
+<div class="layout">
+
+<h1>{title}</h1>
+
+<img srcset={Plant} alt="closeup of a plant" />
+
+This project includes [Vite ImageTools](https://github.com/JonasKruckenberg/imagetools/tree/main/packages/vite) for image optimisation. It's a great way to reduce transfer size and improve performance for images in SvelteKit projects.
+
+To generate optimised images, you need to import image files with a query string that provides instructions about sizing, formats, transformations, etc.
+
+Here's an abridged example showing how I've added the photo at the top of this post:
+
+```svelte
+<script context="module">
+	import Plant from './plant2.jpg?w=400;600;800;900&format=webp;avif;jpg&srcset';
+</script>
+
+<main>
+	<img srcset={Beach} alt="boathouses at the beach" />
+</main>
+```
+
+I like to generate and use a <code>srcset</code> with .avif files because they're very efficient and have [decent support](https://caniuse.com/?search=avif) (~66% at time of writing), .webp for most other browsers, and .jpg files as a last resort 😵
+
+If you're writing in a .svx file, there won't be a warning if you don't add <code>alt</code>s to your images, so I'm reminding you now - add alt text to your images!
+
+</div>
+
+<style>
+    .layout {
+		padding: 6rem 0;
+		display: grid;
+		grid-template-columns:
+			minmax(1.2rem, 1fr)
+			minmax(auto, 65ch)
+			minmax(1.2rem, 1fr);
+        max-width: 100ch;
+        margin: auto;
+	}
+
+	.layout > * {
+		grid-column: 2;
+	}
+
+	.layout > pre, .layout > img {
+		grid-column: 1 / 4;
+	}
+
+	.layout > * + * {
+		margin-top: 2rem;
+	}
+
+	img {
+		aspect-ratio: 3/2;
+		background: var(--primary-100);
+		color: var(--primary-100);
+	}
+</style>

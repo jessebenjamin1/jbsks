@@ -1,0 +1,86 @@
+---
+slug: /the-seo-component
+title: The SEO Component
+description: I come from a digital marketing background, so setting appropriate metadata and doing a bit of SEO is important to me!
+date: '2022-05-26'
+---
+
+<script context="module">
+	import SEO from '$lib/components/SEO.svelte';
+</script>
+
+<SEO title={`${title}`} {description} slug={`/blog/${slug}/`} />
+
+<div class="layout">
+
+<h1>{title}</h1>
+
+I come from a digital marketing background, so setting appropriate metadata and doing a bit of SEO is important to me! Let's break down the component.
+
+<h2>Gotta Give Props</h2>
+
+This is a component which can be used to set common meta tags in the <code>head</code> of pages in a Svelte app.
+
+You can set a default <code>title</code>, <code>description</code>, <code>image</code>, and various other props in the component itself. When using the component, it's recommended to always pass <code>title</code> and <code>description</code> as props to avoid duplicate titles and metadescriptions across your site. These props will set <code>title</code> & <code>description</code> meta tags, as well as associated Open Graph & Twitter tags.
+
+This component also accepts Open Graph- & Twitter-specific props that will override the generic <code>title</code> and <code>description</code> values if passed.
+
+The logic of the component assumes that the default value for <code>image</code> and <code>alt</code> are set for a global default sharing image. I recommend adding your default share image to the static folder of your Sveltekit project. You can see an example of the setup for a global default sharing image in this project with <code>export let image = '/beach.jpg';</code>.
+
+Here's an example of a very standard instance of the component, assuming that all of the default values have been changed to be relevant to the project:
+
+```svelte
+<SEO
+	title="About Page | MDSvex Starter Blog"
+	description="This is a starter Sveltekit blog with support for MDSvex & image optimisation via Vite ImageTools."
+	slug="/about/"
+/>
+```
+
+If you really wanted to, you could have different titles, descriptions, and images for Search Engines, Facebook, and Twitter. I know it sounds strange, but if you're dealing with clients, who knows what could happen 🤷 Here's what that would look like:
+
+```svelte
+<SEO
+	title="Manually Set Title | Website Name"
+	ogTitle="Facebook Title | Website Name"
+	twitterTitle="Twitter Title | Website Name"
+	description="I'm a manually set meta description."
+	ogDescription="I will override the og:description tag."
+	twitterDescription="I will override the twitter:description tag."
+	image="/static/iWillSetOgAndTwitterImageTags.jpg"
+	ogImage="/static/iWillOverrideOgImageTag.jpg"
+	ogImageAlt="manual alt text for OG image"
+	twitterImage="/static/iWillOverrideTwitterImageTag.jpg"
+	twitterImageAlt="manual alt text for Twitter image"
+	slug="/"
+/>
+```
+
+</div>
+
+<style>
+    .layout {
+		padding: 6rem 0;
+		display: grid;
+		grid-template-columns:
+			minmax(1.2rem, 1fr)
+			minmax(auto, 65ch)
+			minmax(1.2rem, 1fr);
+        max-width: 100ch;
+        margin: auto;
+	}
+
+	.layout > * {
+		grid-column: 2;
+	}
+
+	.layout > pre, .layout > img {
+		grid-column: 1 / 4;
+	}
+
+	.layout > * + * {
+		margin-top: 2rem;
+	}
+
+	
+</style>

@@ -1,0 +1,93 @@
+---
+slug: /loading-posts
+title: Loading Posts as Data
+description: SvelteKit supports loading data at build time for static output. This project uses .svx files in the filesystem as a data source.
+date: '2021-05-28'
+---
+
+<script context="module">
+	import SEO from '$lib/components/SEO.svelte';
+</script>
+
+<SEO title={`${title}`} {description} slug={`/blog/${slug}/`} />
+
+<div class="layout">
+
+<h1>{title}</h1>
+
+SvelteKit supports loading data at build time for static output. This project uses .svx files in the filesystem as a data source. I based a lot of this project on [Raphael Magarzi's SvelteKit Blog](https://megzari.com/blog/about_this_site), so you may want to check that out too!
+
+There's really not much else to say, so here's the code that handles the post loading and sorting on the blog summary page:
+
+```svelte
+<script context="module">
+	export const postList = import.meta.glob('./blog/*/*.svx');
+	let body = [];
+	for (const path in postList) {
+		body.push(postList[path]().then(({ metadata }) => metadata));
+	}
+	export async function load({ page, fetch }) {
+		const posts = await Promise.all(body);
+		return {
+			props: {
+				posts
+			}
+		};
+	}
+</script>
+
+<script>
+	export let posts;
+	function sortByDate(a, b) {
+		const dateA = a.date;
+		const dateB = b.date;
+		let comparison = 0;
+		if (dateA > dateB) {
+			comparison = 1;
+		} else if (dateA < dateB) {
+			comparison = -1;
+		}
+		return comparison * -1;
+	}
+	posts.sort(sortByDate);
+</script>
+```
+
+## Potential Gotchas
+
+On line 2, <code>import.meta.glob('./blog/_/_.svx');</code> is importing via a relative path, so if you're loading post data on a different page, make sure that your relative path is pointing to the right place.
+
+The second <code>script</code> tag has a function to sort the posts by date. You could easily change the function to sort by something else from your frontmatter by changing <code>date</code> to whatever you want to sort by.
+
+If you want to reverse the order of your sorted posts, you can remove the negative multiplier at the end of the <code>sortByDate</code> function.
+
+Hopefully that's enough for you reverse engineer and modify if you need something different to what's already here!
+
+</div>
+
+<style>
+    .layout {
+		padding: 6rem 0;
+		display: grid;
+		grid-template-columns:
+			minmax(1.2rem, 1fr)
+			minmax(auto, 65ch)
+			minmax(1.2rem, 1fr);
+        max-width: 100ch;
+        margin: auto;
+	}
+
+	.layout > * {
+		grid-column: 2;
+	}
+
+	.layout > pre, .layout > img {
+		grid-column: 1 / 4;
+	}
+
+	.layout > * + * {
+		margin-top: 2rem;
+	}
+
+	
+</style>
