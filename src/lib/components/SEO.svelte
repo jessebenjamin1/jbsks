@@ -5,10 +5,10 @@
 	export let description = 'This is a fallback metadescription.';
 	export let ogDescription;
 	export let twitterDescription;
-	export let image = '/assets/images/websites.jpg';
+	export let image = '/images/plant1.jpg';
 	export let ogImageWidth;
 	export let ogImageHeight;
-	export let alt = 'upside down silvereye bird';
+	export let alt = 'closeup of a plant';
 	export let ogImage;
 	export let ogImageAlt;
 	export let ogImageType;
