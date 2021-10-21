@@ -30,7 +30,7 @@ Here's an abridged example showing how I've added the photo at the top of this p
 </script>
 
 <main>
-	<img srcset={Beach} alt="boathouses at the beach" />
+	<img srcset={Plant} alt="closeup of a plant" />
 </main>
 ```
 
