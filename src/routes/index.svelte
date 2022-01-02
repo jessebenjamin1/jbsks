@@ -1,38 +1,23 @@
 <script context="module">
-	import SEO from '$components/SEO.svelte';
-	import HeroBanner from '$components/HeroBanner.svelte';
-	import bannerJpg from '../../static/images/leaf.jpg?w=300;450;900;1280;1500;1920;2500&jpg&srcset';
-	import bannerWebp from '../../static/images/leaf.jpg?w=300;450;900;1280;1500;1920;2500&webp&srcset';
-	import bannerPlaceholder from '../../static/images/leaf.jpg?width=5';
-	export const postList = import.meta.glob('./blog/*/*.svx');
-	let body = [];
-	for (const path in postList) {
-		body.push(postList[path]().then(({ metadata }) => metadata));
-	}
-	export async function load({ page, fetch }) {
-		const posts = await Promise.all(body);
+	export async function load({ fetch }) {
+		const allPosts = await fetch('/blog.json').then((res) => res.json());
+		const posts = allPosts.slice(0, 3);
 		return {
 			props: {
 				posts
 			}
 		};
 	}
+	import SEO from '$lib/components/SEO.svelte';
+	import Image from '$lib/components/Image.svelte';
+	import bannerMeta from '$static/images/leaf.jpg?width=288&metadata';
+	const { bannerSrc, bannerWidth, bannerHeight } = bannerMeta;
+	import bannerPlaceholder from '$static/images/leaf.jpg?w=10&blur=10&quality=5';
+	import bannerSrcset from '$static/images/leaf.jpg?w=288;576;900;1280;1920&format=webp;jpg&srcset&quality=80';
 </script>
 
 <script>
 	export let posts;
-	function sortByDate(a, b) {
-		const dateA = a.date;
-		const dateB = b.date;
-		let comparison = 0;
-		if (dateA > dateB) {
-			comparison = 1;
-		} else if (dateA < dateB) {
-			comparison = -1;
-		}
-		return comparison * -1;
-	}
-	posts.sort(sortByDate);
 </script>
 
 <SEO
@@ -41,16 +26,22 @@
 	slug="/"
 />
 
-<HeroBanner
-	focus="center"
-	placeholder={bannerPlaceholder}
-	srcsetJpg={bannerJpg}
-	srcsetWebp={bannerWebp}
-	showOverlay={false}
-	title="JB SvelteKit Starter"
-/>
+<section class="stack">
+	<Image
+		loading="eager"
+		srcset={bannerSrcset}
+		src={bannerSrc}
+		width={bannerWidth}
+		height={bannerHeight}
+		alt="closeup of a leaf"
+		placeholder={bannerPlaceholder}
+	/>
+	<div class="bannerContent mx-auto">
+		<h1 class="mx-auto fs-4">JB SvelteKit Starter</h1>
+	</div>
+</section>
 
-<section class="py-r">
+<section class="py-c1">
 	<div class="mx-auto w-sm flow">
 		<h2>Hyper-performant, flexible Static Sites & Blogs with SvelteKit & MDSvex!</h2>
 		<div class="line" />
@@ -64,7 +55,11 @@
 			was a lack of good reference for a blog with support for search & image optimisation all in
 			the one place.
 		</p>
-		<a href="https://github.com/jessebenjamin1/jbsks" target="_blank" rel="noopener" class="btn"
+		<a
+			href="https://github.com/jessebenjamin1/jbsks"
+			target="_blank"
+			rel="noopener"
+			class="btn iconbtn"
 			><svg
 				viewBox="0 0 24 24"
 				width="24"
@@ -83,14 +78,24 @@
 	</div>
 </section>
 
-<section class="py-r dark">
+<section class="py-c1 bg-g-50 col-p-900">
 	<div class="mx-auto w-xl flow">
 		<h2 class="ta-c">Blog posts about blog posts</h2>
 		<div class="blog-list mt-lg">
-			{#each posts as { title, description, slug }}
+			{#each posts as { title, description, slug, alt, focus, srcset, imageSrc, imageWidth, imageHeight, placeholder, dominantColor }}
 				<article>
 					<main class="flow flow-md">
-						<h1 class="font-md">{title}</h1>
+						<Image
+							{srcset}
+							src={imageSrc}
+							{alt}
+							width={imageWidth}
+							height={imageHeight}
+							{placeholder}
+							{dominantColor}
+							{focus}
+						/>
+						<h1 class="fs-2 fw-6">{title}</h1>
 						<p>{description}</p>
 						<a sveltekit:prefetch class="btn" href={`/blog${slug}`}>Full Post</a>
 					</main>
@@ -100,49 +105,33 @@
 	</div>
 </section>
 
-<section class="py-r">
+<section class="py-c1">
 	<div class="mx-auto w-sm flow">
-		<h2>SvelteKit goes hard</h2>
+		<h2>SvelteKit is great</h2>
 		<p>
-			SvelteKit is really cool. Svelte by itself is incredible, and SvelteKit is exactly what you
-			want from a meta-framework. Even though it's geared more for web apps than websites, it can
-			definitely be used to produce hyper-performant sites that make heavy use of images and other
-			creative assets that make for good marketing sites.
+			I think SvelteKit is really cool. Svelte by itself is incredible, and SvelteKit is exactly
+			what you want from a meta-framework. It may be less purpose-built for it than other
+			meta-frameworks, but it can definitely be used to produce hyper-performant marketing sites &
+			blogs that make heavy use of images with the great DX Svelte provides.
 		</p>
 		<p>
 			Looking at the roadmap in SvelteKit's GitHub repo, it seems like it's only going to get easier
-			to do so in the future.I'm excited, and I think you should be too!
+			to do so in the future. I'm excited, and I think you should be too!
 		</p>
 	</div>
 </section>
 
-<style>
-	.dark {
-		background: var(--primary-100);
-		color: var(--gray-700);
-	}
-
-	.line {
-		height: 4px;
-		background: var(--primary-200);
-		width: 10rem;
-	}
-
-	.border-blur {
-		display: grid;
-		grid-template-areas: 'center';
-	}
-
-	.border-blur::after {
-		content: '';
-		grid-area: center;
-		border: 4px dashed var(--secondary-400);
-		filter: blur(4px);
-	}
-
-	.border-blur > * {
-		grid-area: center;
-		padding: 3rem;
+<style lang="postcss">
+	.bannerContent {
+		width: var(--content-width);
+		max-width: var(--md);
+		text-align: center;
+		padding: calc(2 * var(--s-xl)) 0;
+		h1 {
+			background: white;
+			padding: 1rem;
+			width: max-content;
+		}
 	}
 
 	.blog-list {

@@ -3,17 +3,38 @@ slug: /the-seo-component
 title: The SEO Component
 description: I come from a digital marketing background, so setting appropriate metadata and doing a bit of SEO is important to me!
 date: '2022-05-26'
+alt: closeup of a leaf
+focus: center
 ---
 
 <script context="module">
+	// Import image info for thumbnails
+   import meta from './leaf.jpg?width=288&metadata';
+   const {src, width, height} = meta;
+   import placeholder from './leaf.jpg?w=10&blur=10&quality=5';
+   import srcset from './leaf.jpg?w=288;576;900;1280;1920&format=webp;jpg&srcset&quality=80';
+   import shareImage from './leaf.jpg?width=1280&quality=80'
+   
+   // Add image info to post metadata
+   metadata.srcset = srcset;
+   metadata.imageSrc = src;
+   metadata.placeholder = placeholder;
+   metadata.imageWidth = Math.round(width);
+   metadata.imageHeight = Math.round(height);
+
 	import SEO from '$lib/components/SEO.svelte';
+	import Image from '$lib/components/Image.svelte';
 </script>
 
-<SEO title={`${title}`} {description} slug={`/blog/${slug}/`} />
+<SEO title={`${title}`} {description} slug={`/blog${slug}/`} image={shareImage} ogImageWidth={width} ogImageHeight={height} ogImageAlt={alt} twitterImage={shareImage} twitterImageAlt={alt} />
 
 <div class="layout">
 
-<h1>{title}</h1>
+<h1 class="fs-5 ta-c">{title}</h1>
+
+<div class="imageContainer">
+<Image {srcset} {src} {width} {height} {alt} {placeholder} />
+</div>
 
 I come from a digital marketing background, so setting appropriate metadata and doing a bit of SEO is important to me! Let's break down the component.
 
@@ -60,7 +81,7 @@ If you really wanted to, you could have different titles, descriptions, and imag
 
 <style>
     .layout {
-		padding: 6rem 0;
+		padding: var(--s-sm) 0 var(--s-c1);
 		display: grid;
 		grid-template-columns:
 			minmax(1.2rem, 1fr)
@@ -74,13 +95,11 @@ If you really wanted to, you could have different titles, descriptions, and imag
 		grid-column: 2;
 	}
 
-	.layout > pre, .layout > img {
+	.layout > pre, .layout > img, .layout > pre, .layout > .imageContainer {
 		grid-column: 1 / 4;
 	}
 
 	.layout > * + * {
 		margin-top: 2rem;
-	}
-
-	
+	}	
 </style>

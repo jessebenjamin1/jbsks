@@ -1,5 +1,5 @@
 <footer>
-	<div class="flow flow-sm alignsmall mx-auto">
+	<div class="flow flow-sm w-sm mx-auto">
 		<p>This is a SvelteKit Starter by <a href="https://jessebenjamin.me/">Jesse Benjamin</a> ✨</p>
 	</div>
 </footer>
@@ -19,7 +19,7 @@
 	}
 
 	a {
-		color: var(--primary-400);
+		color: var(--primary-500);
 		transition: color 0.3s;
 	}
 

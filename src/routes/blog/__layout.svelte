@@ -2,6 +2,4 @@
 	import '../../prism.css';
 </script>
 
-<div>
-	<slot />
-</div>
+<slot />
