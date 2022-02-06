@@ -16,7 +16,6 @@ const config = {
 			assets: 'build',
 			fallback: null
 		}),
-		target: '#svelte',
 		files: {
 			assets: 'src/static'
 		},
