@@ -16,6 +16,14 @@ const config = {
 			assets: 'build',
 			fallback: null
 		}),
+		csp: {
+			directives: {
+				'script-src': ['self', 'unsafe-inline'],
+				'base-uri': ['self'],
+				'img-src': ['self'],
+				'object-src': ['none']
+			}
+		},
 		files: {
 			assets: 'src/static'
 		},
